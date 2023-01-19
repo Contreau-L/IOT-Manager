@@ -13,7 +13,7 @@ const getTypeOfFrame = (data) => {
 
 const decodeMacAddress = (data) => {
   const macAddressBytes = data.slice(0, 6);
-  return macAddressBytes.toString("hex");
+  return macAddressBytes
 };
 
 module.exports = { decodeMacAddress, getTypeOfFrame };
