@@ -15,10 +15,10 @@ const server = net.createServer((socket) => {
     if (!socket.macAddress) {
       dataProcessing
         .identificationFrameProcess(data)
-        .then((mac) => (socket.macAddress = mac));
-      console.log(
-        `New client connected with MAC address: ${socket.macAddress}`
-      );
+        .then((mac) => { 
+          socket.macAddress = mac;
+          console.log(`New client connected with MAC address: ${socket.macAddress}` );
+        });
     } else {
       let type = decodeAttributes.getTypeOfFrame(data);
       console.log(`data received from ${socket.macAddress}`);
@@ -41,4 +41,3 @@ server.listen(PORT, () => {
   console.log(`Server listening on port ${PORT}`);
 });
 
-db.endDbConnection();

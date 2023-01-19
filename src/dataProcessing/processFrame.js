@@ -2,7 +2,8 @@ const decodeFrame = require("./decodeFrame");
 const insertLogs = require("../database/insertion").insertData;
 const decodeAttributes = require("./decodeAttributes");
 const checkIfDeviceExists = require("../database/selection").checkMacExists;
-
+const insertNewDevice = require("../database/insertion").insertNewDevice;
+insertNewDevice
 const frameProcess = (mac, data) => {
   const parsedData = decodeFrame(data);
   insertLogs(mac, parsedData);

@@ -12,8 +12,11 @@ const getTypeOfFrame = (data) => {
 };
 
 const decodeMacAddress = (data) => {
-  const macAddressBytes = data.slice(0, 6);
-  return macAddressBytes
+    //check the type
+    console.log("data : ", data); 
+    const macAddress = data.readIntBE(0,6);
+    console.log(`macAddressBytes: ${macAddress}`);
+    return macAddress;
 };
 
 module.exports = { decodeMacAddress, getTypeOfFrame };

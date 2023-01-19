@@ -1,4 +1,4 @@
-const { client } = require("./dbConnection");
+const getClient = require("./dbConnection").getClient;
 
 const insertData = async (mac, parsedData) => {
   try {
@@ -10,10 +10,9 @@ const insertData = async (mac, parsedData) => {
       parsedData.waterTemperature,
       parsedData.waterLevel,
       parsedData.occurredAt,
-      addedAt,
       parsedData.phValue,
     ];
-    await client.query(queryText, values);
+    await getClient().query(queryText, values);
     console.log(`Inserted log with mac address ${mac}`);
   } catch (err) {
     console.error(`Error inserting log: ${err}`);
@@ -21,8 +20,13 @@ const insertData = async (mac, parsedData) => {
 };
 
 const insertNewDevice = async (mac) => {
-  await client.query(`INSERT INTO "Device" ("id_mac") VALUES (${mac})`);
+  try{
+    await getClient().query(`INSERT INTO "Device" ("id_mac","name","latitude","longitude") VALUES (${mac},'undefined','-1','-1')`);
+  }catch(err){
+    console.error(`Error inserting new device: ${err}`);
+  }
 };
 module.exports = {
   insertData,
+  insertNewDevice
 };
