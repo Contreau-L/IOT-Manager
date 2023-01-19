@@ -1,9 +1,26 @@
-const decodeFrame = require('./decodeFrame');
-const insertLogs = require('../database/insertion').insertData;
-const processFrame = (mac, data) => {
-    const parsedData = decodeFrame(data);
-    insertLogs(mac, parsedData);
-}
+const decodeFrame = require("./decodeFrame");
+const insertLogs = require("../database/insertion").insertData;
+const decodeAttributes = require("./decodeAttributes");
+const checkIfDeviceExists = require("../database/selection").checkMacExists;
 
-module.exports = {processFrame};
+const frameProcess = (mac, data) => {
+  const parsedData = decodeFrame(data);
+  insertLogs(mac, parsedData);
+};
 
+const identificationFrameProcess = (data) => {
+  const mac = decodeAttributes.decodeMacAddress(data);
+  const promise = new Promise((resolve, reject) => {
+    checkIfDeviceExists(mac)
+      .then((exists) => {
+        if (!exists) {
+          insertNewDevice(mac);
+        }
+        resolve();
+      })
+      .catch((err) => reject());
+  });
+  return promise.then(() => mac).catch((err) => -1);
+};
+
+module.exports = { frameProcess, identificationFrameProcess };
