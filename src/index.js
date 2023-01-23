@@ -13,12 +13,12 @@ const server = net.createServer((socket) => {
   // Handle data received
   socket.on("data", (data) => {
     if (!socket.macAddress) {
-      dataProcessing
-        .identificationFrameProcess(data)
-        .then((mac) => { 
-          socket.macAddress = mac;
-          console.log(`New client connected with MAC address: ${socket.macAddress}` );
-        });
+      dataProcessing.identificationFrameProcess(data).then((mac) => {
+        socket.macAddress = mac;
+        console.log(
+          `New client connected with MAC address: ${socket.macAddress}`
+        );
+      });
     } else {
       let type = decodeAttributes.getTypeOfFrame(data);
       console.log(`data received from ${socket.macAddress}`);
@@ -40,4 +40,3 @@ const server = net.createServer((socket) => {
 server.listen(PORT, () => {
   console.log(`Server listening on port ${PORT}`);
 });
-

@@ -1,7 +1,6 @@
 const getClient = require("./dbConnection").getClient;
 
 const checkMacExists = async (mac) => {
-  console.log(getClient());
   try {
     const { rows } = await getClient().query(
       `SELECT * FROM "Device" WHERE "id_mac" = ${mac}`

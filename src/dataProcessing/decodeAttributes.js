@@ -12,11 +12,14 @@ const getTypeOfFrame = (data) => {
 };
 
 const decodeMacAddress = (data) => {
-    //check the type
-    console.log("data : ", data); 
-    const macAddress = data.readIntBE(0,6);
-    console.log(`macAddressBytes: ${macAddress}`);
-    return macAddress;
+  const macAddress = data.readIntBE(0, 6);
+  console.log("macAddress : ", macAddress.toString(16));
+  return macAddress;
 };
 
-module.exports = { decodeMacAddress, getTypeOfFrame };
+const decodeNumberOfHumiditySensors = (data) => {
+    const numberOfHumiditySensors = data.readUint8(6);
+    return numberOfHumiditySensors;
+}
+
+module.exports = { decodeMacAddress, getTypeOfFrame , decodeNumberOfHumiditySensors };

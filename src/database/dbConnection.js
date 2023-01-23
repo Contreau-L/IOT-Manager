@@ -24,6 +24,6 @@ const endDbConnection = () => {
 
 const getClient = () => {
   return client;
-}
+};
 
 module.exports = { connectToDb, endDbConnection, getClient };

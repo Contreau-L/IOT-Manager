@@ -1,4 +1,3 @@
-const FRAME_SIZE = 255;
 decodeAttributes = require("./decodeAttributes");
 
 const decodeFrame = (data) => {
@@ -6,25 +5,33 @@ const decodeFrame = (data) => {
     throw new Error("Data must be in binary format (Buffer)");
   }
   let parsedData = {};
-  let offset = 0;
-  parsedData.numberOfHumiditySensors = data[1];
-  offset++;
+  let obj = { offset: 1 };
+  parsedData.numberOfHumiditySensors = readOneByte(data, obj);
   parsedData.humiditySensorsValue = [];
-  for (let i = 1; i < parsedData.numberOfHumiditySensors; i++) {
-    parsedData.humiditySensorsValue.push(data[i + 1]);
-    offset++;
+  //retenir la valeur de l'offset
+  let staticOffset = obj.offset;
+  for (let i = obj.offset; i < parsedData.numberOfHumiditySensors + staticOffset; i++) {
+    parsedData.humiditySensorsValue.push(readOneByte(data, obj));
   }
-  parsedData.waterTemperature = data[offset++];
-  parsedData.waterLeveLValue = data[offset++];
-  parsedData.phValue = data[offset++];
 
-  parsedData.minutes = data[offset++];
-  parsedData.hour = data[offset++];
-  parsedData.day = data[offset++];
-  parsedData.month = data[offset++];
-  parsedData.year = data[offset++];
+  parsedData.waterTemperature = readOneByte(data, obj);
+  parsedData.waterLevel = readOneByte(data, obj);
+  parsedData.phValue = readOneByte(data, obj);
+  const minutes = readOneByte(data, obj);
+  const hour = readOneByte(data, obj);
+  const day = readOneByte(data, obj);
+  const month = readOneByte(data, obj);
+  const year = readOneByte(data, obj);
+
+  parsedData.occurredAt = new Date(year, month, day, hour, minutes);
 
   return parsedData;
+};
+
+const readOneByte = (data, obj) => {
+  const val = data.readUInt8(obj.offset);
+  obj.offset += 1;
+  return val;
 };
 
 module.exports = decodeFrame;
