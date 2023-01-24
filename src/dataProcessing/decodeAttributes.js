@@ -19,6 +19,7 @@ const decodeMacAddress = (data) => {
 
 const decodeNumberOfHumiditySensors = (data) => {
     const numberOfHumiditySensors = data.readUint8(6);
+    console.log("numberOfHumiditySensors : ", numberOfHumiditySensors);
     return numberOfHumiditySensors;
 }
 

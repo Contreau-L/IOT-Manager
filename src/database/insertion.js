@@ -32,16 +32,27 @@ const insertNewDevice = async (mac) => {
   }
 };
 
-const insertNewHumiditySensor = async (mac) => {
+const insertNewHumiditySensor = async (mac,line) => {
   try {
-    const { row } = await getClient().query( `INSERT INTO "HumiditySensor" (fk_device,vegetable_type,humidity_threshold) VALUES (${mac},'undefined','50')` );
+    const { rows } = await getClient().query( `INSERT INTO "GardenLine" (fk_device,vegetable_type,humidity_threshold,line_index) VALUES (${mac},'undefined','50','${line}')` );
   }
   catch (err) {
     console.error(`Error inserting new humidity sensor: ${err}`);
   }
 
 }
+
+const insertConnectionHistory = async (mac) => {
+  try{
+    const { rows } = await getClient().query(`INSERT INTO "ConnectionHistory" (fk_device,occurred_at) VALUES (${mac},NOW())`);
+  }
+  catch (err) {
+    console.error(`Error inserting new connection history: ${err}`);
+  }
+}
 module.exports = {
   insertData,
   insertNewDevice,
+  insertNewHumiditySensor,
+  insertConnectionHistory
 };

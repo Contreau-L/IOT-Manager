@@ -28,6 +28,8 @@ const server = net.createServer((socket) => {
         dataProcessing.frameProcess(socket.macAddress, data);
       }
     }
+    socket.write(Buffer.from([0x10])); //we send an ack after receiving a frame
+
   });
 
   // Handle disconnection
