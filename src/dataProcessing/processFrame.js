@@ -1,17 +1,22 @@
 const decodeFrame = require("./decodeFrame");
-const insertLogs = require("../database/insertion").insertData;
+const insertLogs = require("../database/insertion").insertLogs;
 const insertNewHumiditySensor = require("../database/insertion").insertNewHumiditySensor;
 const decodeAttributes = require("./decodeAttributes");
 const insertConnectionHistory  = require("../database/insertion").insertConnectionHistory;
 const checkIfDeviceExists = require("../database/selection").checkMacExists;
 const insertNewDevice = require("../database/insertion").insertNewDevice;
+const insertNewHumidityValue = require("../database/insertion").insertNewHumidityValue;
 
 const frameProcess = (mac, data) => {
   const parsedData = decodeFrame(data);
   console.log("parsedData : ", parsedData);
-  insertLogs(mac, parsedData).then((logId) =>
-    console.log(`Inserted log with id ${logId}`)
-  );
+  insertLogs(mac, parsedData).then((logId) => {
+    console.log(`Inserted log with id ${logId}`);
+    let index = 0;
+    parsedData.humiditySensorsValue.forEach(element => {
+      insertNewHumidityValue(mac,index,logId,element);
+    });
+  });
 };
 
 const identificationFrameProcess = (data) => {
@@ -24,7 +29,6 @@ const identificationFrameProcess = (data) => {
 
           let promises = [];
           await insertNewDevice(mac);
-          console.log("let's insert " + numberOfHumiditySensors + " humidity sensors");
           for(let i = 0; i < numberOfHumiditySensors; i++) {
             promises.push(insertNewHumiditySensor(mac,i));
           }

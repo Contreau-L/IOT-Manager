@@ -1,6 +1,6 @@
 const getClient = require("./dbConnection").getClient;
 
-const insertData = async (mac, parsedData) => {
+const insertLogs = async (mac, parsedData) => {
   try {
     const queryText = `INSERT INTO "Logs" (fk_device, water_temperature, water_level, occurred_at, added_at, ph)
                            VALUES ($1, $2, $3, $4, NOW(), $5) RETURNING id`;
@@ -21,6 +21,20 @@ const insertData = async (mac, parsedData) => {
     return -1;
   }
 };
+const insertNewHumidityValue = async (mac, line,logId, value) => {
+  try{
+    const { rows } = await getClient().query(`SELECT id FROM "GardenLine" WHERE fk_device = ${mac} AND line_index = ${line}`);
+    const queryText = `INSERT INTO "HumidityLevel" (fk_logs,fk_garden_line,humidity_level) VALUES ($1,$2,$3)`;
+    const values = [logId,rows[0].id,value];
+    await getClient().query(queryText,values);
+  }
+  catch (err) {
+    console.log(`Error inserting new humidity value: ${err}`);
+  }
+  
+
+};
+
 
 const insertNewDevice = async (mac) => {
   try {
@@ -51,8 +65,9 @@ const insertConnectionHistory = async (mac) => {
   }
 }
 module.exports = {
-  insertData,
+  insertLogs,
   insertNewDevice,
   insertNewHumiditySensor,
-  insertConnectionHistory
+  insertConnectionHistory,
+  insertNewHumidityValue
 };

@@ -8,7 +8,6 @@ const decodeFrame = (data) => {
   let obj = { offset: 1 };
   parsedData.numberOfHumiditySensors = readOneByte(data, obj);
   parsedData.humiditySensorsValue = [];
-  //retenir la valeur de l'offset
   let staticOffset = obj.offset;
   for (let i = obj.offset; i < parsedData.numberOfHumiditySensors + staticOffset; i++) {
     parsedData.humiditySensorsValue.push(readOneByte(data, obj));

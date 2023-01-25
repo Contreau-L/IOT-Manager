@@ -8,9 +8,6 @@ db.connectToDb();
 
 // Create a TCP server
 const server = net.createServer((socket) => {
-  console.log("New client connected");
-
-  // Handle data received
   socket.on("data", (data) => {
     if (!socket.macAddress) {
       dataProcessing.identificationFrameProcess(data).then((mac) => {
@@ -21,7 +18,6 @@ const server = net.createServer((socket) => {
       });
     } else {
       let type = decodeAttributes.getTypeOfFrame(data);
-      console.log(`data received from ${socket.macAddress}`);
       if (type === "socketEnd") {
       } //TODO: handle socket end
       else {
