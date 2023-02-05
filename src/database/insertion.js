@@ -1,5 +1,5 @@
 const getClient = require("./dbConnection").getClient;
-
+const getIdFromGardenLine = require("./selection").getIdFromGardenLine;
 const insertLogs = async (mac, parsedData) => {
   try {
     const queryText = `INSERT INTO "Logs" (fk_device, water_temperature, water_level, occurred_at, added_at, ph)
@@ -23,9 +23,10 @@ const insertLogs = async (mac, parsedData) => {
 };
 const insertNewHumidityValue = async (mac, line,logId, value) => {
   try{
-    const { rows } = await getClient().query(`SELECT id FROM "GardenLine" WHERE fk_device = ${mac} AND line_index = ${line}`);
+    const gardenLineId = await getIdFromGardenLine(mac,line);
+    if (gardenLineId == -1) throw new Error("Garden line id not found");
     const queryText = `INSERT INTO "HumidityLevel" (fk_logs,fk_garden_line,humidity_level) VALUES ($1,$2,$3)`;
-    const values = [logId,rows[0].id,value];
+    const values = [logId,gardenLineId,value];
     await getClient().query(queryText,values);
   }
   catch (err) {
