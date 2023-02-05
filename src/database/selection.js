@@ -10,5 +10,14 @@ const checkMacExists = async (mac) => {
     console.error(`Error checking if MAC ${mac} exists: ${err}`);
   }
 };
-
-module.exports = { checkMacExists };
+const getIdFromGardenLine = async (mac, line) => {
+  try {
+    const { rows } = await getClient().query(`SELECT id FROM "GardenLine" WHERE fk_device = ${mac} AND line_index = ${line}`);
+    return rows[0].id;
+  }
+  catch (err) {
+    console.error(`Error getting id from garden line: ${err}`);
+    return -1;
+  }
+};
+module.exports = { checkMacExists, getIdFromGardenLine};
