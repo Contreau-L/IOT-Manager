@@ -1,0 +1,28 @@
+version: '3'
+
+services:
+  nodejs:
+    image: node:latest
+    container_name: iot-manager
+    volumes:
+      - .:/app
+    networks:
+      - contreaul-net
+    working_dir: /app
+    env_file:
+      - .env
+    environment:
+      - DB_USER=contreaul
+      - DB_HOST=contreaul-db
+      - DB_DATABASE=contreaul
+      - DB_PASSWORD=contreaul
+      - DB_PORT=5432
+      - SOCKET_PORT=5000
+    ports:
+      - 5000:5000
+    command: sh -c "npm install && npm run start"
+
+networks:
+  contreaul-net:
+    name: database_contreaul-net
+    external: true
