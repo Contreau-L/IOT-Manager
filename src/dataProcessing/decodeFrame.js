@@ -28,7 +28,6 @@ const decodeFrame = (data) => {
 };
 
 const readOneByte = (data, obj) => {
-  console.log("obj.offset :  , read this : ", obj.offset, data.readUInt8(obj.offset));
   const val = data.readUInt8(obj.offset);
   obj.offset += 1;
   return val;
