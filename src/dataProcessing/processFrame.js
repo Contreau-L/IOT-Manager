@@ -7,7 +7,7 @@ const checkIfDeviceExists = require("../database/selection").checkMacExists;
 const insertNewDevice = require("../database/insertion").insertNewDevice;
 const insertNewHumidityValue = require("../database/insertion").insertNewHumidityValue;
 
-const frameProcess = (mac, data) => {
+const frameProcessing = (mac, data) => {
   const parsedData = decodeFrame(data);
   console.log("parsedData : ", parsedData);
   insertLogs(mac, parsedData).then((logId) => {
@@ -42,4 +42,4 @@ const identificationFrameProcess = (data) => {
   return promise;
 };
 
-module.exports = { frameProcess, identificationFrameProcess };
+module.exports = { frameProcessing, identificationFrameProcess };

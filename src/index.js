@@ -21,10 +21,9 @@ const server = net.createServer((socket) => {
       if (type === "socketEnd") {
       } //TODO: handle socket end
       else {
-        dataProcessing.frameProcess(socket.macAddress, data);
+        dataProcessing.frameProcessing(socket.macAddress, data);
       }
     }
-    socket.write(Buffer.from([0x10])); //we send an ack after receiving a frame
 
   });
 

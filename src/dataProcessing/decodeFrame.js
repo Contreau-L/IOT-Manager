@@ -20,7 +20,7 @@ const decodeFrame = (data) => {
   const hour = readOneByte(data, obj);
   const day = readOneByte(data, obj);
   const month = readOneByte(data, obj);
-  const year = readOneByte(data, obj);
+  const year = 2000+readOneByte(data, obj);
 
   parsedData.occurredAt = new Date(year, month, day, hour, minutes);
 
