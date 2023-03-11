@@ -5,7 +5,7 @@ const decodeFrame = (data) => {
     throw new Error("Data must be in binary format (Buffer)");
   }
   let parsedData = {};
-  let obj = { offset: 1 };
+  let obj = { offset: 0 };
   parsedData.numberOfHumiditySensors = readOneByte(data, obj);
   parsedData.humiditySensorsValue = [];
   let staticOffset = obj.offset;
@@ -16,18 +16,19 @@ const decodeFrame = (data) => {
   parsedData.waterTemperature = readOneByte(data, obj);
   parsedData.waterLevel = readOneByte(data, obj);
   parsedData.phValue = readOneByte(data, obj);
-  const minutes = readOneByte(data, obj);
-  const hour = readOneByte(data, obj);
   const day = readOneByte(data, obj);
-  const month = readOneByte(data, obj);
+  const month = readOneByte(data, obj)-1;
   const year = 2000+readOneByte(data, obj);
+  const hour = readOneByte(data, obj);
+  const minutes = readOneByte(data, obj);
 
-  parsedData.occurredAt = new Date(year, month, day, hour, minutes);
-
+  const utcDate = new Date(Date.UTC(year, month, day, hour, minutes));
+  parsedData.occurredAt = new Date(utcDate.toLocaleString());
   return parsedData;
 };
 
 const readOneByte = (data, obj) => {
+  console.log("obj.offset :  , read this : ", obj.offset, data.readUInt8(obj.offset));
   const val = data.readUInt8(obj.offset);
   obj.offset += 1;
   return val;
