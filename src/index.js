@@ -1,10 +1,7 @@
 const net = require("net");
-const db = require("./database/dbConnection");
 const dataProcessing = require("./dataProcessing/processFrame");
 require("dotenv").config();
 const PORT = process.env.SOCKET_PORT;
-
-db.connectToDb();
 
 // Create a TCP server
 const server = net.createServer((socket) => {
