@@ -19,7 +19,7 @@ const frameProcessing = (mac, data) => {
 const identificationFrameProcess = (data) => {
   const mac = decodeAttributes.decodeMacAddress(data);
   const numberOfHumiditySensors = decodeAttributes.decodeNumberOfHumiditySensors(data);
-  return deviceIdentification(mac);
+  return deviceIdentification(mac, numberOfHumiditySensors);
 };
 
 module.exports = { frameProcessing, identificationFrameProcess };
