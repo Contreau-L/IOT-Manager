@@ -6,8 +6,8 @@ function logInsertion(logData) {
         .then((response) => response.data.id);
 }
 
-function deviceIdentification(deviceId) {
-    return axios.post(getDeviceIdentificationUrl(deviceId))
+function deviceIdentification(deviceId, linesNumber) {
+    return axios.post(getDeviceIdentificationUrl(deviceId, linesNumber))
         .then((response) => response.data.id);
 }
 

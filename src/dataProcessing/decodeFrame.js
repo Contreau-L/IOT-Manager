@@ -1,3 +1,4 @@
+const {dateBuilder} = require("../utils/dateBuilder");
 decodeAttributes = require("./decodeAttributes");
 
 const decodeFrame = (data) => {
@@ -21,8 +22,7 @@ const decodeFrame = (data) => {
   const hour = readOneByte(data, obj);
   const minutes = readOneByte(data, obj);
 
-  const utcDate = new Date(Date.UTC(year, month, day, hour, minutes));
-  parsedData.occurredAt = new Date(utcDate.toLocaleString());
+  parsedData.occurredAt = dateBuilder(year, month, day, hour, minutes);
   return parsedData;
 };
 
