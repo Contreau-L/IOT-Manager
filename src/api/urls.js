@@ -1,12 +1,21 @@
-function getAPIBaseUrl() {
+const getAPIBaseUrl = () => {
     return process.env.API_URL + ":" + process.env.API_PORT + "/v1";
 }
-function getDeviceIdentificationUrl(deviceId, linesNumber) {
+const getDeviceIdentificationUrl = (deviceId, linesNumber) => {
     return getAPIBaseUrl() + `/devices/${deviceId}/identification?` + new URLSearchParams({lines: linesNumber}).toString();
 }
 
-function getLogCreationUrl() {
+const getLogCreationUrl = () => {
     return getAPIBaseUrl() + `/logs`;
 }
 
-module.exports = { getDeviceIdentificationUrl, getLogCreationUrl}
+const getWateringInWaiting = (deviceId) => {
+    return getAPIBaseUrl() + `/actions/${deviceId}/waiting`;
+}
+
+const getLinesThreshold = (deviceId) => {
+    console.log(getAPIBaseUrl() + `/devices/${deviceId}/thresholds`);
+    return getAPIBaseUrl() + `/devices/${deviceId}/thresholds`;
+}
+
+module.exports = { getDeviceIdentificationUrl, getLogCreationUrl, getWateringInWaiting,getLinesThreshold}

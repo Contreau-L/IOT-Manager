@@ -1,14 +1,25 @@
 const axios = require("axios");
-const {getLogCreationUrl, getDeviceIdentificationUrl} = require("./urls");
+const {getLogCreationUrl, getDeviceIdentificationUrl,getWateringInWaiting,getLinesThreshold} = require("./urls");
 
-function logInsertion(logData) {
+const logInsertion = (logData) => {
     return axios.post(getLogCreationUrl(), logData)
         .then((response) => response.data.id);
 }
 
-function deviceIdentification(deviceId, linesNumber) {
+const deviceIdentification = (deviceId, linesNumber) => {
     return axios.post(getDeviceIdentificationUrl(deviceId, linesNumber))
         .then((response) => response.data.id);
 }
 
-module.exports = { logInsertion, deviceIdentification};
+const wateringInWaiting = (deviceId) => {
+    return axios.get(getWateringInWaiting(deviceId))
+        .then((response) => response.data);
+}
+
+const getLinesInfo = (deviceId) => {
+    return axios.get(getLinesThreshold(deviceId))
+        .then((response) => response.data);
+}
+
+
+module.exports = { logInsertion, deviceIdentification, wateringInWaiting, getLinesInfo};

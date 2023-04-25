@@ -1,7 +1,9 @@
 const net = require("net");
 const dataProcessing = require("./dataProcessing/processFrame");
+const stuffToSend = require("./dataProviding/jsonToIOT");
 require("dotenv").config();
 const PORT = process.env.SOCKET_PORT;
+const ack = 'a'
 
 // Create a TCP server
 const server = net.createServer((socket) => {
@@ -12,16 +14,33 @@ const server = net.createServer((socket) => {
         console.log(
           `New client connected with MAC address: ${socket.macAddress}`
         );
+      socket.write(ack);
+
+        
       });
-    } else {
+    } 
+    else {
       let type = decodeAttributes.getTypeOfFrame(data);
       if (type === "socketEnd") {
+        console.log("socketEnd");
+        stuffToSend.getLinesData(socket.macAddress).then((buffer) => {
+           console.log("array : ", buffer);
+          socket.write(buffer);
+        })
+        stuffToSend.getWateringForIOT(socket.macAddress).then((buffer) => {
+          socket.write(buffer);
+        })
+        //socket.end();
       } //TODO: handle socket end
-      else {
+      else if (type === "data") {
         dataProcessing.frameProcessing(socket.macAddress, data);
+        socket.write(ack)
+      }
+      else {
+        console.log("Unknown frame type");
       }
     }
-
+  
   });
 
   // Handle disconnection

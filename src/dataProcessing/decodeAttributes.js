@@ -12,7 +12,7 @@ const getTypeOfFrame = (data) => {
 };
 
 const decodeMacAddress = (data) => {
-  const macAddress = data.readIntBE(0, 6);
+  const macAddress = data.readUintBE(0, 6);
   console.log("macAddress : ", macAddress.toString(16));
   return macAddress;
 };

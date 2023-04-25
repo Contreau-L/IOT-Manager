@@ -22,4 +22,6 @@ const identificationFrameProcess = (data) => {
   return deviceIdentification(mac, numberOfHumiditySensors);
 };
 
+
+
 module.exports = { frameProcessing, identificationFrameProcess };
