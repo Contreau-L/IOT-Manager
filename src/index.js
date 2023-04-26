@@ -24,14 +24,12 @@ const server = net.createServer((socket) => {
       if (type === "socketEnd") {
         console.log("socketEnd");
         stuffToSend.getLinesData(socket.macAddress).then((buffer) => {
-           console.log("array : ", buffer);
           socket.write(buffer);
         })
         stuffToSend.getWateringForIOT(socket.macAddress).then((buffer) => {
           socket.write(buffer);
         })
-        //socket.end();
-      } //TODO: handle socket end
+      }
       else if (type === "data") {
         dataProcessing.frameProcessing(socket.macAddress, data);
         socket.write(ack)
