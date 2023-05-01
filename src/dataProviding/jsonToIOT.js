@@ -6,7 +6,6 @@ const getWateringForIOT = async (deviceId) => {
     let array = [];
     for(let i = 0; i < actions.length; i++) {
         array.push(actions[i].index);
-        array.push(actions[i].threshold);
     }
     if (actions.length == 0) {
         array.push(emptyActions);
@@ -19,7 +18,6 @@ const getLinesData = async (deviceId) => {
     const { thresholds } = await getLinesInfo(deviceId);
     let array = [];
     for(let i = 0; i < thresholds.length; i++) {
-        array.push(i);
         array.push(thresholds[i]);
     }
     const buffer = Buffer.from(array);

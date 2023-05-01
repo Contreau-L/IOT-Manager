@@ -1,8 +1,15 @@
+const ACK = require("../utils/constant");
+
 const getTypeOfFrame = (data) => {
   let type;
+  console.log("data[0] : ", data[0]);
+
   switch (data[0]) {
     case 0xff:
-      type = "socketEnd";
+      type = "endLogs";
+      break;
+    case ACK.charCodeAt(0):
+      type = "goToNextInformation";
       break;
     case 0x00:
       type = "data";
