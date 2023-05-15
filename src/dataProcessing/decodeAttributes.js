@@ -14,6 +14,9 @@ const getTypeOfFrame = (data) => {
     case 0x00:
       type = "data";
       break;
+    case 0x01:
+      type = "wateringStatus";
+      break;
   }
   return type;
 };

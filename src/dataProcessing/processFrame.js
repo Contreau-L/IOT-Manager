@@ -1,10 +1,8 @@
-const decodeFrame = require("./decodeFrame");
 const decodeAttributes = require("./decodeAttributes");
-const {logInsertion, deviceIdentification} = require("../api/services");
-
+const {logInsertion, deviceIdentification, postWateringStatus} = require("../api/services");
+const {decodeWateringFrame,decodeFrame} = require("./decodeFrame");
 const frameProcessing = (mac, data) => {
   const parsedData = decodeFrame(data);
-  console.log("parsedData : ", parsedData);
   const logData = {
     device: mac,
     water_temperature: parsedData.waterTemperature,
@@ -16,6 +14,23 @@ const frameProcessing = (mac, data) => {
   logInsertion(logData).then((logId) => console.log(`Inserted log with id ${logId}`))
 };
 
+const wateringFrameProcessing = (deviceId,data) => {
+  const parsedData = decodeWateringFrame(data);
+  let wateringResult = [];
+  parsedData.wateringResult.forEach(element => {
+    let action = {
+      "id": deviceId,
+      "status": element.status,
+      "index": element.index,
+      "occurred_at": parsedData.occurredAt
+    }
+    wateringResult.push(action);
+  });
+  console.log(wateringResult);
+  postWateringStatus({actions : wateringResult}).then((response) => console.log(response)); 
+
+}
+
 const identificationFrameProcess = (data) => {
   const mac = decodeAttributes.decodeMacAddress(data);
   const numberOfHumiditySensors = decodeAttributes.decodeNumberOfHumiditySensors(data);
@@ -24,4 +39,7 @@ const identificationFrameProcess = (data) => {
 
 
 
-module.exports = { frameProcessing, identificationFrameProcess };
+
+
+
+module.exports = { frameProcessing, identificationFrameProcess, wateringFrameProcessing };

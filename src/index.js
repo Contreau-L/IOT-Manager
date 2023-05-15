@@ -8,7 +8,6 @@ const ACK = require("./utils/constant");
 // Create a TCP server
 const server = net.createServer((socket) => {
   socket.on("data", (data) => {
-    console.log("data : ", data);
     if (!socket.macAddress) {
       dataProcessing.identificationFrameProcess(data).then((mac) => {
         socket.macAddress = mac;
@@ -22,6 +21,7 @@ const server = net.createServer((socket) => {
       });
     } 
     else {
+      console.log("data : ", data);
       let type = decodeAttributes.getTypeOfFrame(data);
       if (type === "endLogs") {
         console.log("socketEnd");
@@ -37,7 +37,12 @@ const server = net.createServer((socket) => {
       }
       else if (type === "data") {
         dataProcessing.frameProcessing(socket.macAddress, data);
-        socket.write(ACK)
+        socket.write(ACK);
+      }
+      else if (type === "wateringStatus") {
+        console.log("wateringStatus");
+        dataProcessing.wateringFrameProcessing(socket.macAddress, data);
+        socket.write(ACK);
       }
       else {
         console.log("Unknown frame type");

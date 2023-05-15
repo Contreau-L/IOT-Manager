@@ -1,5 +1,5 @@
 const axios = require("axios");
-const {getLogCreationUrl, getDeviceIdentificationUrl,getWateringInWaiting,getLinesThreshold} = require("./urls");
+const {getLogCreationUrl, getDeviceIdentificationUrl,getWateringInWaiting,getLinesThreshold, getPostWateringStatusUrl} = require("./urls");
 
 const logInsertion = (logData) => {
     return axios.post(getLogCreationUrl(), logData)
@@ -21,5 +21,9 @@ const getLinesInfo = (deviceId) => {
         .then((response) => response.data);
 }
 
+const postWateringStatus = (wateringResult) => {
+    return axios.post(getPostWateringStatusUrl(), wateringResult);
+}
 
-module.exports = { logInsertion, deviceIdentification, wateringInWaiting, getLinesInfo};
+
+module.exports = { logInsertion, deviceIdentification, wateringInWaiting, getLinesInfo,postWateringStatus};

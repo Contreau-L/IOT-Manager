@@ -18,4 +18,7 @@ const getLinesThreshold = (deviceId) => {
     return getAPIBaseUrl() + `/devices/${deviceId}/thresholds`;
 }
 
-module.exports = { getDeviceIdentificationUrl, getLogCreationUrl, getWateringInWaiting,getLinesThreshold}
+const getPostWateringStatusUrl = () => {
+    return getAPIBaseUrl() + '/actions/status';
+}
+module.exports = { getDeviceIdentificationUrl, getLogCreationUrl, getWateringInWaiting,getLinesThreshold, getPostWateringStatusUrl}
