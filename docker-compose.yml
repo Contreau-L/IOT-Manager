@@ -13,7 +13,7 @@ services:
       - .env
     environment:
       - SOCKET_PORT=5000
-      - API_URL=http://host.docker.internal
+      - API_URL=http://51.83.41.102
       - API_PORT=8080
     ports:
       - 5000:5000
